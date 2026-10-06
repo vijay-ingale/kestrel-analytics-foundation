@@ -1,0 +1,46 @@
+{
+  "pos_transactions": {
+    "table": "pos", "partition": "ingest_date", "key": ["txn_id", "txn_line_no"],
+    "required": ["txn_id", "txn_line_no", "outlet_code", "sku_code", "event_ts", "channel"],
+    "fields": {
+      "txn_id":"text", "txn_line_no":"bigint", "basket_id":"text", "outlet_code":"text", "channel":"text", "sku_code":"text", "event_ts":"timestamptz", "quantity":"numeric", "unit_price":"numeric", "discount_amount":"numeric", "tax_amount":"numeric", "uom":"text", "payment_mode":"text", "till_id":"bigint", "cashier_id":"text", "promo_code":"text", "loyalty_id":"text", "source_file":"text"
+    },
+    "aliases": {"quantity":["qty", "quantity_units"]},
+    "versions": [{"name":"pos-v1", "before":"2025-10-01", "quantity_column":"qty"}, {"name":"pos-v2", "from":"2025-10-01", "quantity_column":"quantity_units"}],
+    "enums": {"channel":["GT", "MT", "HORECA", "ECOM"], "uom":["EA", "CS"]},
+    "nonnegative": ["quantity", "unit_price", "discount_amount", "tax_amount"]
+  },
+  "reefer_telemetry": {
+    "table":"telemetry", "partition":"dt", "key":[],
+    "required":["device_id", "reading_ts", "telemetry_vendor", "firmware_version", "warehouse_code", "gateway_id"],
+    "fields": {"device_id":"text", "vehicle_registration":"text", "telemetry_vendor":"text", "firmware_version":"text", "route_code":"text", "warehouse_code":"text", "gateway_id":"text", "reading_ts":"timestamptz", "temp_value":"numeric", "temp_unit":"text", "humidity_pct":"numeric", "door_open_flag":"bigint", "battery_pct":"numeric", "gps_lat":"numeric", "gps_lon":"numeric"},
+    "aliases": {"temp_value":["temp_value", "temp_c", "temp_f"]},
+    "enums": {"telemetry_vendor":["THERMLOG", "COLDEYE"], "temp_unit":["C", "F"], "door_open_flag":[0,1]},
+    "ranges": {"humidity_pct":[0,100], "battery_pct":[0,100], "gps_lat":[-90,90], "gps_lon":[-180,180]},
+    "vendor_units":{"THERMLOG":"C", "COLDEYE":"F"}
+  },
+  "wms_scan_events": {
+    "table":"wms", "partition":"dt", "key":["scan_id"],
+    "required":["scan_id", "warehouse_code", "event_type", "order_number", "sku_code", "event_ts"],
+    "fields":{"scan_id":"text", "warehouse_code":"text", "event_type":"text", "order_number":"text", "sku_code":"text", "batch_id":"text", "qty_cases":"numeric", "pallet_id":"text", "dock_door":"bigint", "operator_id":"text", "handheld_device":"text", "event_ts":"timestamp"},
+    "enums":{"event_type":["RECEIVE", "PUTAWAY", "PICK", "PACK", "STAGE", "DISPATCH"]}, "nonnegative":["qty_cases"]
+  },
+  "erp_cdc/outlet_master": {
+    "table":"outlet", "partition":"extract_date", "key":["outlet_code", "__op_ts", "__seq"],
+    "required":["outlet_code", "__op", "__op_ts", "__seq"],
+    "fields":{"outlet_code":"text", "outlet_name":"text", "channel":"text", "outlet_format":"text", "city":"text", "route_code":"text", "warehouse_code":"text", "credit_limit":"numeric", "credit_terms_days":"bigint", "gst_number":"text", "status":"text", "__op":"text", "__op_ts":"timestamptz", "__seq":"bigint"},
+    "enums":{"__op":["I", "U", "D"], "channel":["GT", "MT", "HORECA", "ECOM"]}
+  },
+  "erp_cdc/product_master": {
+    "table":"product", "partition":"extract_date", "key":["sku_code", "__op_ts", "__seq"],
+    "required":["sku_code", "__op", "__op_ts", "__seq"],
+    "fields":{"sku_code":"text", "product_name":"text", "category":"text", "brand":"text", "case_pack":"numeric", "mrp":"numeric", "list_price":"numeric", "gst_rate_pct":"numeric", "shelf_life_days":"bigint", "is_chilled":"bigint", "status":"text", "__op":"text", "__op_ts":"timestamptz", "__seq":"bigint"},
+    "enums":{"__op":["I", "U", "D"], "is_chilled":[0,1]}
+  },
+  "erp_cdc/sales_order_header": {
+    "table":"orders", "partition":"extract_date", "key":["order_number", "__op_ts", "__seq"],
+    "required":["order_number", "__op", "__op_ts", "__seq"],
+    "fields":{"order_number":"text", "outlet_code":"text", "warehouse_code":"text", "route_code":"text", "order_date":"date", "requested_delivery_date":"date", "order_status":"text", "line_count":"bigint", "order_value_gross":"numeric", "discount_amount":"numeric", "tax_amount":"numeric", "source_system":"text", "__op":"text", "__op_ts":"timestamptz", "__seq":"bigint"},
+    "enums":{"__op":["I", "U", "D"], "source_system":["SFA_MOBILE", "ERP_WEB", "PARTNER_API"]}
+  }
+}
