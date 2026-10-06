@@ -26,4 +26,5 @@ jobs:
           python-version: '3.12'
           cache: pip
       - run: python -m pip install -r requirements.txt
+      - run: python -m pipeline.catalogue --check
       - run: python -m pytest -q --disable-warnings

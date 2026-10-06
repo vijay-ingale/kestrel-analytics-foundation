@@ -17,7 +17,11 @@ def test_ui_views_and_query_execution(monkeypatch):
     assert not app.exception
     metric = next(widget for widget in app.selectbox if widget.label == "Metric")
     app.get("button_group")[0].set_value(["Operations"])
-    metric.set_value("trips").run(timeout=60)
+    metric.set_value("cycles").run(timeout=60)
+    assert not app.exception and app.dataframe
+    trip_metric = next(widget for widget in app.selectbox if widget.label == "Metric")
+    app.get("button_group")[0].set_value(["Operations"])
+    trip_metric.set_value("trips").run(timeout=60)
     assert not app.exception and app.warning
     app.get("button_group")[0].set_value(["Data Quality"]).run(timeout=60)
     assert not app.exception and app.dataframe

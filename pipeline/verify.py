@@ -22,6 +22,8 @@ def main():
             "completeness":conn.execute("SELECT completeness_status,count(*) AS partitions FROM analytics.mart_feed_completeness GROUP BY 1 ORDER BY 1").fetchall(),
             "deleted_orders":conn.execute("SELECT count(*) FILTER (WHERE is_deleted) AS deleted_orders,count(*) FILTER (WHERE deletion_timestamp_exception) AS stale_delete_timestamps FROM analytics.fct_orders").fetchone(),
             "cycles":conn.execute("SELECT cycle_status,count(*) AS order_warehouse_days FROM analytics.mart_warehouse_cycles GROUP BY 1 ORDER BY 1").fetchall(),
+            "cold_chain":conn.execute("SELECT count(*) AS distinct_readings,count(temperature_c) AS valid_readings,count(*) FILTER (WHERE temp_value > 8) AS naive_excursions,count(*) FILTER (WHERE is_excursion) AS normalized_excursions,count(*) FILTER (WHERE unit_resolution_method <> 'EXPLICIT') AS inferred_units,count(*) FILTER (WHERE firmware_version='2.1.4') AS corrected_clocks FROM analytics.fct_telemetry").fetchone(),
+            "sales":conn.execute("SELECT count(*) AS distinct_lines,sum(gross_sales_inr) AS gross_sales_inr,sum(net_sales_inr) AS net_sales_inr FROM analytics.fct_sales").fetchone(),
         }
         txn = conn.execute("SELECT txn_id FROM analytics.fct_sales ORDER BY txn_id LIMIT 1").fetchone()["txn_id"]
     params = parameters(bounds["first_day"],bounds["last_day"],lookup_key=txn)

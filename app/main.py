@@ -73,6 +73,8 @@ def results(metric_id, custom=None, chart=False):
     if frame.empty:
         st.info("No eligible records for this selection.")
     else:
+        if metric_id == "cycles" and (frame["coverage_pct"].fillna(0) < 1).any():
+            st.warning("Fewer than 1% of observed order/warehouse/day groups have an eligible cycle in at least one warehouse. Medians reflect this small subset.")
         for column in frame.columns:
             if column.endswith(("_inr","_pct","_minutes")) or column in ("units_eaches","confirmed_units_eaches","z_score"):
                 frame[column] = pd.to_numeric(frame[column],errors="coerce")
