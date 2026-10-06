@@ -1,0 +1,12 @@
+name: kestrel
+version: '1.0.0'
+config-version: 2
+profile: kestrel
+model-paths: [models]
+macro-paths: [macros]
+test-paths: [tests]
+models:
+  kestrel:
+    +materialized: table
+    staging:
+      +materialized: view

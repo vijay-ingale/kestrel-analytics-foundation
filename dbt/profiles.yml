@@ -1,0 +1,12 @@
+kestrel:
+  target: local
+  outputs:
+    local:
+      type: postgres
+      host: "{{ env_var('PGHOST', 'localhost') }}"
+      port: "{{ env_var('PGPORT', '15432') | int }}"
+      user: "{{ env_var('PGUSER', 'kestrel') }}"
+      password: "{{ env_var('PGPASSWORD', 'kestrel_local') }}"
+      dbname: "{{ env_var('PGDATABASE', 'kestrel') }}"
+      schema: analytics
+      threads: 2

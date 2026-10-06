@@ -1,0 +1,26 @@
+version: 2
+sources:
+  - name: raw
+    schema: raw
+    tables:
+      - name: pos
+      - name: telemetry
+      - name: wms
+      - name: outlet
+      - name: product
+      - name: orders
+  - name: reference
+    schema: reference
+    tables:
+      - name: uom_conversion
+      - name: warehouse_master
+      - name: carrier_master
+      - name: fiscal_calendar
+      - name: legacy_finance_weekly_report
+      - name: expected_partitions
+  - name: audit
+    schema: audit
+    tables:
+      - name: runs
+      - name: files
+      - name: quarantine
