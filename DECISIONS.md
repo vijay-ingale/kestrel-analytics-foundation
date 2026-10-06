@@ -1,0 +1,13 @@
+# Decisions
+
+**Scope and architecture.** Python validates partitioned Parquet in bounded batches and bulk-loads PostgreSQL; dbt owns analytical transformations and tests. A Streamlit explorer exposes catalogue metrics, their SQL, and quality coverage. This is a local, reproducible assessment system; PostgreSQL is chosen for inspectable SQL and established deployment patterns, with additional loading cost compared with DuckDB.
+
+**Integrity.** Versioned source mappings retain source values, paths, and row provenance. Invalid records are quarantined; corrupt files and absent partitions remain visible. Missing measurements are not zero-filled. Unknown units are not guessed. Exact duplicate payloads are collapsed; conflicting business keys are excluded pending resolution. Historical outlet attributes use source-time CDC with sequence tie-breaking and deletion intervals.
+
+**Ambiguities.** Pre-upgrade POS UOM is absent: strict eaches totals exclude those rows rather than claiming recovered units. Sales amounts use source quantity times source unit price, not converted eaches. Telemetry uses the generator's timestamp convention and firmware correction. Trip/carrier excursions and actual delivery SLA cannot be measured with these feeds. WMS STAGE-to-DISPATCH is a same-day dock proxy, with eligibility reported. Finance totals are independently generated: reconciliation shows duplicate and date effects plus unexplained residual, never a fabricated match. ERP order deletion records reuse creation timestamps; their later sequence marks a tombstone, exposed as a source-contract exception.
+
+**Deliberate limits.** Approved question templates show SQL before read-only execution; unrestricted LLM SQL, forecasting, statistical imputation, and ML anomaly models are deferred. Deterministic validation and gap detection are delivered first. Statistical anomaly flags require representative history and remain advisory. Carrier master is retained without inventing joins.
+
+**Next two weeks.** Agree trip IDs, delivery completion timestamps, invoice/freight reconciliation, historical UOM rules, and dock semantics with owners. Add approved mappings, incremental transformations, monitored scheduling, calibrated anomaly baselines, authentication, and a separately permissioned query service.
+
+**Scaling.** Input memory is bounded by batch size. This version rebuilds analytics; database disk, bulk loading, sorting/deduplication, and rebuild duration are the first constraints. Scale-10/100 throughput is not claimed without measurement. Partition pruning, incremental marts, partitioned facts, retention, and workload separation precede a distributed engine. Measured results and unresolved limits belong in README, not unsupported capacity promises.

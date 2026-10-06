@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.env
+data/
+output/
+dbt/target/
+dbt/logs/
+*.parquet
+*.duckdb
+*.pyc
