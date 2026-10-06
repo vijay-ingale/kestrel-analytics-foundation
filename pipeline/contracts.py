@@ -22,7 +22,10 @@ def parse(value, kind):
     if kind == "text":
         return str(value).strip()
     if kind in ("numeric", "bigint"):
-        number = Decimal(str(value))
+        try:
+            number = Decimal(str(value))
+        except InvalidOperation as error:
+            raise ValueError("invalid number") from error
         if not number.is_finite():
             raise ValueError("nonfinite number")
         if kind == "bigint":

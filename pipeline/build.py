@@ -10,7 +10,7 @@ from psycopg.types.json import Jsonb
 from pipeline.ingest import bootstrap, ingest
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_URL = "postgresql://kestrel:kestrel_local@localhost:55432/kestrel"
+DEFAULT_URL = "postgresql://kestrel:kestrel_local@localhost:15432/kestrel"
 
 
 def dbt_build(url):
