@@ -54,7 +54,7 @@ def make_fixture(root):
     w = dict(scan_id="SC1",warehouse_code="WH01",event_type="STAGE",order_number="SO1",sku_code="S1",event_ts="2025-01-02 10:00:00",qty_cases=1)
     write_parquet(root,"wms_scan_events","dt=2025-01-02",[w,dict(w,scan_id="SC2",event_type="DISPATCH",event_ts="2025-01-02 11:00:00"),dict(w,scan_id="SC3",order_number="SO2"),dict(w,scan_id="SC4",order_number="SO3",event_ts="2025-01-02 12:00:00"),dict(w,scan_id="SC5",order_number="SO3",event_type="DISPATCH",event_ts="2025-01-02 11:00:00")])
     o = dict(outlet_code="O1",channel="MT",warehouse_code="WH01",__op="I",__op_ts="2024-12-31T00:00:00Z",__seq=1)
-    write_parquet(root,"erp_cdc/outlet_master","extract_date=2025-01-01",[o,dict(o,channel="ECOM",__op="U",__op_ts="2025-01-02T00:00:00Z",__seq=2),dict(o,channel="HORECA",__op="U",__op_ts="2025-01-02T00:00:00Z",__seq=100)])
+    write_parquet(root,"erp_cdc/outlet_master","extract_date=2025-01-01",[o,dict(o,channel="ECOM",__op="U",__op_ts="2025-01-01T19:00:00Z",__seq=2),dict(o,channel="HORECA",__op="U",__op_ts="2025-01-01T19:00:00Z",__seq=100)])
     write_parquet(root,"erp_cdc/product_master","extract_date=2025-01-01",[dict(sku_code="S1",__op="I",__op_ts="2024-12-31T00:00:00Z",__seq=1,case_pack=6)])
     order = dict(order_number="SO1",outlet_code="O1",warehouse_code="WH01",order_date="2025-01-01",source_system="ERP_WEB",order_value_gross=100,__op="I",__op_ts="2025-01-01T00:00:00Z",__seq=1)
     write_parquet(root,"erp_cdc/sales_order_header","extract_date=2025-01-01",[order,dict(order,__op="U",__op_ts="2025-01-02T00:00:00Z",__seq=2),dict(order,__op="D",__seq=100),dict(order,order_number="SO2",source_system="PARTNER_API",order_value_gross=108.5,__seq=3)])

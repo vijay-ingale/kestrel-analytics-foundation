@@ -1,3 +1,4 @@
+{{ config(indexes=[{'columns': ['txn_id', 'txn_line_no'], 'unique': true}, {'columns': ['business_date']}]) }}
 select p.*, (p.event_ts at time zone 'Asia/Kolkata')::date as business_date,
        p.quantity * p.unit_price as gross_sales_inr,
        case when p.quantity is not null and p.unit_price is not null and p.discount_amount is not null

@@ -1,5 +1,5 @@
 """Explicit mappings: never infer business meaning from similar column names."""
-from datetime import date, datetime, timezone
+from datetime import date, datetime
 from decimal import Decimal, InvalidOperation
 import hashlib
 import json
@@ -8,6 +8,16 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACTS = json.loads((ROOT / "contracts/feeds.json").read_text())
+
+
+def json_safe(value):
+    if isinstance(value, dict):
+        return {key:json_safe(item) for key,item in value.items()}
+    if isinstance(value, list):
+        return [json_safe(item) for item in value]
+    if isinstance(value, float) and not math.isfinite(value):
+        return str(value)
+    return value
 
 
 def empty(value):

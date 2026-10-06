@@ -1,10 +1,8 @@
 """Bounded-memory COPY ingestion with file-level rollback and source provenance."""
 import csv
-from datetime import datetime, timezone
 import json
 from pathlib import Path
 
-import psycopg
 from psycopg import sql
 from psycopg.types.json import Jsonb
 import pyarrow.parquet as pq

@@ -1,3 +1,4 @@
+{{ config(indexes=[{'columns': ['outlet_code', 'valid_from'], 'unique': true}]) }}
 with tie_resolved as (
     select distinct on (outlet_code, __op_ts) *
     from {{ ref('stg_outlet') }} order by outlet_code, __op_ts, __seq desc
