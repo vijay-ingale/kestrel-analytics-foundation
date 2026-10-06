@@ -1,6 +1,6 @@
 # Kestrel Analytics Foundation
 
-Validated ingestion, documented metrics, Finance reconciliation, and an inspectable query explorer for the Kestrel assessment. Read [DECISIONS.md](DECISIONS.md) first. Metric definitions live in the single [KPI catalogue](docs/kpi_catalogue.json), also rendered in the UI.
+Validated ingestion, documented metrics, Finance reconciliation, and an inspectable query explorer for the Kestrel assessment. Read [DECISIONS.md](DECISIONS.md) first. The readable [KPI catalogue](docs/kpi_catalogue.md) is generated from the authoritative [JSON definitions](docs/kpi_catalogue.json), also rendered in the UI. Run `python -m pipeline.catalogue` after changing definitions; `--check` detects stale documentation.
 
 ## Cold Start With Docker
 

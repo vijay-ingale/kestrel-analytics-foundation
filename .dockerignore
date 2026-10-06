@@ -9,6 +9,3 @@ __pycache__
 .pytest_cache
 pytest-cache-files-*
 dbt/.user.yml
-.pytest_cache
-pytest-cache-files-*
-dbt/.user.yml

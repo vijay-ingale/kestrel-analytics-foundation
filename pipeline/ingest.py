@@ -7,7 +7,7 @@ from psycopg import sql
 from psycopg.types.json import Jsonb
 import pyarrow.parquet as pq
 
-from pipeline.contracts import CONTRACTS, inspect_schema, normalize, parse
+from pipeline.contracts import CONTRACTS, inspect_schema, json_safe, normalize, parse
 
 REFERENCES = {
     "uom_conversion": {"sku_code":"text", "eaches_per_case":"numeric", "base_uom":"text", "case_uom":"text"},
@@ -90,7 +90,7 @@ def ingest(conn, data, run_id, batch_size=10000):
                             mapped, errors, warnings, fingerprint = normalize(feed, row)
                             if errors:
                                 rejected += 1
-                                rejected_batch.append((run_id, feed, source_file, observed, errors, Jsonb(row, dumps=lambda value: json.dumps(value, default=str))))
+                                rejected_batch.append((run_id, feed, source_file, observed, errors, Jsonb(json_safe(row), dumps=lambda value: json.dumps(value, default=str,allow_nan=False))))
                             else:
                                 accepted += 1
                                 mapped.update(_hash=fingerprint, _file=source_file, _row=observed, _partition=parse(partition_date, "date"), _schema_version=version, _issues=warnings)
