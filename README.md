@@ -16,7 +16,7 @@ docker compose up -d ui
 Open **http://localhost:8501**. The default data path is `../data`, mounted read-only at `/data`. It must contain `raw/`, `reference/`, and `_manifest/expected_partitions.csv`. To use another path, set `KESTREL_DATA_DIR` before running Compose:
 
 ```powershell
-$env:KESTREL_DATA_DIR='C:/Users/vijay/assessment/dataset_scale1'
+$env:KESTREL_DATA_DIR='/assessment/dataset_scale1'
 ```
 
 ```sh
